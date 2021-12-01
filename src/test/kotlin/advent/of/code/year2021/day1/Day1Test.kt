@@ -8,14 +8,25 @@ import org.junit.jupiter.api.Test
 
 class Day1Test {
     val day1 = Day1()
+    val data = ContentReader.readFileAsNumbers(1)
 
     @Nested
     @DisplayName("Day 1 Part 1 test")
     inner class Day1Part1Test() {
         @Test
         fun assertCorrectResult() {
-            day1.part1(ContentReader.readFileAsNumbers(1))
-            Assertions.assertSame(1, 1)
+            val increases = day1.part1(data)
+            Assertions.assertSame(7, increases)
+        }
+    }
+
+    @Nested
+    @DisplayName("Day 1 Part 2 test")
+    inner class Day1Part2Test() {
+        @Test
+        fun assertCorrectResult() {
+            val increases = day1.part2(data)
+            Assertions.assertSame(5, increases)
         }
     }
 }
