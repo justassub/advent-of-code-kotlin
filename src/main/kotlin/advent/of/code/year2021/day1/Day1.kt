@@ -11,7 +11,7 @@ class Day1 {
     }
 
     fun part2(data: List<Int>): Int {
-        val threeNeighboursSum = data.windowed(size = 3, step = 1, partialWindows = false, transform = { it.sum() })
+        val threeNeighboursSum = data.windowed(size = 3, transform = { it.sum() })
         return part1(threeNeighboursSum)
     }
 
