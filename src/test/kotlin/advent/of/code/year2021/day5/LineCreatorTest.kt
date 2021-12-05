@@ -11,7 +11,7 @@ class LineCreatorTest {
     @ParameterizedTest
     @MethodSource("linesProvider")
     fun calculateLinesCreation(line: String, result: List<Point>) {
-        Assertions.assertEquals(result, LineCreator.createHorizontalOrVerticalLines(line))
+        Assertions.assertEquals(result, LineCreator.createHorizontalOrVerticalLines(line, false))
     }
 
     companion object {

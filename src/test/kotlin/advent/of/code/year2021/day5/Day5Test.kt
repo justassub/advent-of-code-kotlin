@@ -12,4 +12,8 @@ class Day5Test {
     fun part1Example() {
         Assertions.assertEquals(5, day5.task1(data))
     }
+    @Test
+    fun part2Example() {
+        Assertions.assertEquals(12, day5.task2(data))
+    }
 }
