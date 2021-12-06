@@ -9,6 +9,10 @@ object ContentReader {
     fun readFileAsLines(day: Int): List<String> {
         return ContentReader::class.java.getResource("/day$day.txt").readText()
             .lines()
+    }
 
+    fun readFileAsText(day: Int): String {
+        return ContentReader::class.java.getResource("/day$day.txt")
+            .readText(Charsets.UTF_8)
     }
 }
