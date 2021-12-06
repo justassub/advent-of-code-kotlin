@@ -5,15 +5,17 @@ import advent.of.code.year2021.ContentReader
 class Day6 {
     fun task1(fishesWithInitialSpawnDays: List<Int>, days: Int): Long {
         val initialFish = fishesWithInitialSpawnDays
-            .map { Fish(it) }
-        spendTime(initialFish, days)
-        return initialFish.sumOf { it.countYourselfAndChildren() }
+            .groupingBy { it }
+            .eachCount()
+            .mapValues { it.value.toLong() }
+        val ocean = Ocean(initialFish)
+        spendTime(ocean, days)
+        return ocean.fish.values.sum()
     }
 
-    private fun spendTime(fish: List<Fish>, days: Int) {
-        repeat(times = days, action = { _ -> fish.forEach { it.spendDay() } })
+    private fun spendTime(ocean: Ocean, days: Int) {
+        repeat(times = days, action = { ocean.passDay() })
     }
-
 }
 
 fun main() {
@@ -21,6 +23,6 @@ fun main() {
         .map { it.toInt() }
 
     val day6 = Day6()
-
     println(day6.task1(initialFish, 80))
+    println(day6.task1(initialFish, 256))
 }
