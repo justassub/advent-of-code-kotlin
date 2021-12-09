@@ -14,18 +14,14 @@ class Signal(private val digits: List<String>, private val output: List<String>)
 
     val patternOfThree = { s: String -> isLengthOf(s, 5) && s.toSet().containsAll(values.getValue(7).toSet()) }
     val patternOfFive = { s: String ->
-        isLengthOf(s, 5) &&
-                !patternOfThree(s) &&
-                s.toSet().intersect(values.getValue(4).toSet()).size == 3
+        isLengthOf(s, 5) && s.toSet().intersect(values.getValue(4).toSet()).size == 3
     }
-    val patternOfTwo = { s: String ->
-        isLengthOf(s, 5) && !patternOfThree(s) && !patternOfFive(s)
-    }
+    val patternOfTwo = { s: String -> isLengthOf(s, 5) }
 
     val patternOfNine = { s: String -> isLengthOf(s, 6) && s.toSet().containsAll(values.getValue(4).toSet()) }
     val patternOfZero =
-        { s: String -> isLengthOf(s, 6) && !patternOfNine(s) && s.toSet().containsAll((values.getValue(7).toSet())) }
-    val patternOfSix = { s: String -> isLengthOf(s, 6) && !patternOfNine(s) && !patternOfZero(s) }
+        { s: String -> isLengthOf(s, 6) && s.toSet().containsAll((values.getValue(7).toSet())) }
+    val patternOfSix = { s: String -> isLengthOf(s, 6) }
 
 
     private fun findNumberByPatter(text: String): Int {
