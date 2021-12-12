@@ -7,7 +7,7 @@ class Day12 {
         val villages = VillageParser.parseVillages(data)
         val start = villages.first { it.villageType == VillageType.START }
         return countPossiblePaths(
-            start, mutableMapOf(),
+            start, mutableSetOf(),
             alreadyVisitedSmallVillageTwice = false,
             allowMoreThanOnce = false
         )
@@ -17,7 +17,7 @@ class Day12 {
         val villages = VillageParser.parseVillages(data)
         val start = villages.first { it.villageType == VillageType.START }
         return countPossiblePaths(
-            start, mutableMapOf(),
+            start, mutableSetOf(),
             alreadyVisitedSmallVillageTwice = false,
             allowMoreThanOnce = true
         )
@@ -25,7 +25,7 @@ class Day12 {
 
     private fun countPossiblePaths(
         currentVillage: Village,
-        visitedVillages: MutableMap<Village, Long>,
+        visitedVillages: MutableSet<Village>,
         alreadyVisitedSmallVillageTwice: Boolean,
         allowMoreThanOnce: Boolean
     ): Long {
@@ -33,12 +33,10 @@ class Day12 {
         if (currentVillage.villageType == VillageType.FINISH) {
             return 1
         }
-        val amountOfTimesVisitedThisVillage = visitedVillages.getOrDefault(currentVillage, 0L)
-
-        if (currentVillage.villageType == VillageType.START && amountOfTimesVisitedThisVillage > 0) {
+        if (currentVillage.villageType == VillageType.START && visitedVillages.contains(currentVillage)) {
             return 0
         }
-        if (currentVillage.villageType == VillageType.SMALL && amountOfTimesVisitedThisVillage > 0) {
+        if (currentVillage.villageType == VillageType.SMALL && visitedVillages.contains(currentVillage)) {
             if (!allowMoreThanOnce) {
                 return 0
             }
@@ -50,11 +48,9 @@ class Day12 {
 
         }
 
-        val copyOfVisitedValues = visitedVillages.toMutableMap()
+        val copyOfVisitedValues = visitedVillages.toMutableSet()
 
-        copyOfVisitedValues.merge(currentVillage, 1L) { old, new ->
-            old + new
-        }
+        copyOfVisitedValues.add(currentVillage)
 
         return currentVillage.adjVillages.sumOf {
             countPossiblePaths(
