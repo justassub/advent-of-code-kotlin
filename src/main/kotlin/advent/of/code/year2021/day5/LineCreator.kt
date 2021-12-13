@@ -1,5 +1,7 @@
 package advent.of.code.year2021.day5
 
+import advent.of.code.year2021.Point
+
 object LineCreator {
     private val regex = Regex("""(\d+),(\d+) -> (\d+),(\d+)""")
 

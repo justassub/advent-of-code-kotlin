@@ -1,6 +1,7 @@
 package advent.of.code.year2021.day5
 
 import advent.of.code.year2021.ContentReader
+import advent.of.code.year2021.Point
 
 class Day5 {
     fun task1(lines: List<String>): Int {
