@@ -1,5 +1,5 @@
 package advent.of.code.year2021.day14
-
+@Deprecated("Not Performing well")
 class StepRunner(private val initialString: String, val polymerRules: Set<PolymerTemplate>) {
     private fun findRuleBy(t: String) = polymerRules.first { it.matchCondition(t) }
 

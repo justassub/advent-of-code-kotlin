@@ -10,13 +10,20 @@ class Day14Test {
     val day14 = Day14()
 
     @Test
+    fun t() {
+        val x = mutableMapOf("a" to 5)
+        x.merge("a", 8) { x1, x2 -> x1 + x2 }
+        x.merge("b", 8) { x1, x2 -> x1 + x2 }
+        println(x)
+    }
+
+    @Test
     fun part1Example1() {
         Assertions.assertEquals(1588, day14.task1(data, "NNCB", 9))
     }
 
     @Test
-    @Disabled
     fun part1Example2() {
-        Assertions.assertEquals(2188189693529, day14.task1(data, "NNCB", 40))
+        Assertions.assertEquals(2188189693529, day14.task1(data, "NNCB", 39))
     }
 }
