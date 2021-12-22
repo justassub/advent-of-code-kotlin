@@ -8,6 +8,7 @@ object ContentReader {
 
     fun readFileAsLines(day: Int): List<String> {
         return ContentReader::class.java.getResource("/day$day.txt").readText()
+            .trim()
             .lines()
     }
 
