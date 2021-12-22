@@ -9,13 +9,6 @@ class Day14Test {
     val data = ContentReader.readFileAsLines(14).dropLast(1)
     val day14 = Day14()
 
-    @Test
-    fun t() {
-        val x = mutableMapOf("a" to 5)
-        x.merge("a", 8) { x1, x2 -> x1 + x2 }
-        x.merge("b", 8) { x1, x2 -> x1 + x2 }
-        println(x)
-    }
 
     @Test
     fun part1Example1() {
