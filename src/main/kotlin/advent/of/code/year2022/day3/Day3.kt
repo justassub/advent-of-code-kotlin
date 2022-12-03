@@ -11,10 +11,13 @@ fun main() {
         .map { RucksackMaker.makeRucksackBySplitInHalf(it).findCommonElement() }
         .sumOf { PriorityCalculator.funCalculatePriority(it) }
 
-
+    val part2Result = originalLines
+        .chunked(3)
+        .map { Rucksack(it).findCommonElement() }
+        .sumOf { PriorityCalculator.funCalculatePriority(it) }
 
 
     println(part1Result)
 
-
+    println(part2Result)
 }
