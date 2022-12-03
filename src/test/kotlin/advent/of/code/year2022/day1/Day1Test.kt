@@ -1,9 +1,6 @@
-package advent.of.code.year2022
+package advent.of.code.year2022.day1
 
-import advent.of.code.year2022.day1.Elf
-import advent.of.code.year2022.day1.ElfBuilder
-import advent.of.code.year2022.day1.findElfWithMostWeight
-import advent.of.code.year2022.day1.findNumberOfElfsWithMostWeight
+import advent.of.code.year2022.ContentReader2022
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
