@@ -1,6 +1,9 @@
 package advent.of.code.year2022.day9
 
 import advent.of.code.year2022.ContentReader2022
+import advent.of.code.year2022.day9.day9part2.HeadFollowerStrategy
+import advent.of.code.year2022.day9.day9part2.HeadStrategy
+import advent.of.code.year2022.day9.day9part2.KnotFollowerStrategy
 
 import kotlin.system.measureTimeMillis
 
@@ -19,14 +22,26 @@ fun solve() {
 
     val resultPart1 = solvePart1(actions)
     println(resultPart1)
-
+    val resultPart2 = solvePart2(actions)
+    println(resultPart2)
 }
 
+fun createRope(amount: Int): List<Movable> {
+    val master = MovingPart(HeadStrategy())
+    var follower = MovingPart(HeadFollowerStrategy(master))
+    val parts = mutableListOf(master, follower)
+
+    repeat(amount) {
+        val m = MovingPart(KnotFollowerStrategy(follower))
+        parts.add(m)
+        follower = m
+    }
+
+    return parts
+}
 
 fun solvePart1(actions: List<MoveAction>): Int {
-    val master = Follower(null)
-    val follower = Follower(master)
-    val rope = listOf(master, follower)
+    val rope = createRope(0)
 
     return actions.flatMap {
         moveAllAndGetLastFolowerPosition(rope, it)
@@ -35,6 +50,21 @@ fun solvePart1(actions: List<MoveAction>): Int {
         .count()
 
 }
+
+fun solvePart2(actions: List<MoveAction>): Int {
+    val rope = createRope(8)
+    return actions.flatMap {
+        moveAllAndGetLastFolowerPosition(rope, it)
+    }
+        .distinct()
+
+        .let {
+            println(it)
+            it
+        }
+        .count()
+}
+
 
 fun moveAllAndGetLastFolowerPosition(list: List<Movable>, action: MoveAction): List<Position> {
     return (0 until action.amount).map {
