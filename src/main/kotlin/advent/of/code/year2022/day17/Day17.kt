@@ -26,7 +26,7 @@ fun solve() {
 fun solvePart1(actions: List<Direction>): Int {
     val infinityShapesGeneration = generateSequence { ShapesGenerator.getDefaultShapes() }.flatMap { it }
     val tetris = Tetris(infinityShapesGeneration, LinkedList(actions))
-    tetris.play(11)
+    tetris.play(2022)
     return tetris.getPeak()
 }
 

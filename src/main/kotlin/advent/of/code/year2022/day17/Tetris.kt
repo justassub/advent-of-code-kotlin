@@ -3,16 +3,16 @@ package advent.of.code.year2022.day17
 import advent.of.code.util.Direction
 import advent.of.code.util.Point
 import java.util.*
-import kotlin.math.max
 
 class Tetris(private val infinityShapesGeneration: Sequence<(Point) -> Shape>, private val actions: Queue<Direction>) {
     private val alwaysActions = actions.toList()
-    val peaksOfX: MutableMap<Int, Int> = mutableMapOf()
+    val peaksOfX: MutableMap<Int, MutableSet<Int>> = (0..6).associateWith { mutableSetOf(0) }
+        .toMutableMap()
     private val maxX = 6
     fun play(rocks: Int = 2022): Int {
         return infinityShapesGeneration
             .take(rocks)
-            .fold(Point(2, 4)) {  newShapeStartPosition, nextShapeFollowingPosition ->
+            .fold(Point(2, 4)) { newShapeStartPosition, nextShapeFollowingPosition ->
                 playShape(
                     nextShapeFollowingPosition(newShapeStartPosition),
                 )
@@ -22,7 +22,7 @@ class Tetris(private val infinityShapesGeneration: Sequence<(Point) -> Shape>, p
     private fun playShape(shape: Shape): Point {
         moveShapeToRestPosition(shape)
         shape.getPoints()
-            .forEach { peaksOfX.merge(it.x, it.y) { x1, x2 -> max(x1, x2) } }
+            .forEach { peaksOfX.getValue(it.x).add(it.y) }
         return Point(2, shape.findMaxOfY() + 4)
     }
 
@@ -30,7 +30,7 @@ class Tetris(private val infinityShapesGeneration: Sequence<(Point) -> Shape>, p
         windPushShape(shape)
         if (canFall(shape)) {
             shape.move(Direction.DOWN)
-                moveShapeToRestPosition(shape)
+            moveShapeToRestPosition(shape)
 
         }
     }
@@ -51,29 +51,31 @@ class Tetris(private val infinityShapesGeneration: Sequence<(Point) -> Shape>, p
     }
 
     private fun canBeBlown(shape: Shape, direction: Direction): Boolean {
-        val minY = shape.getPoints().minOf { it.y }
-        val maxShapeXPoint = shape.getPoints().filter { it.y == minY }.maxBy { it.x }
-        val minShapeXPoint = shape.getPoints().filter { it.y == minY }.maxBy { it.x }
+        val minX = shape.getPoints().minOf { it.x }
+        val maxXShape = shape.getPoints().maxOf { it.x }
+        val maxShapeXPoints = shape.getPoints().filter { it.x == maxXShape }
         return when (direction) {
-            Direction.RIGHT -> maxShapeXPoint.x < maxX && peaksOfX.getOrDefault(
-                maxShapeXPoint.x + 1,
-                0
-            ) < maxShapeXPoint.y
+            Direction.RIGHT -> maxXShape < maxX && maxShapeXPoints.none {
+                peaksOfX.getOrDefault(it.x + 1, emptySet()).contains(it.y)
+            }
 
-            Direction.LEFT -> shape.getPoints()
-                .minOf { it.x } > 0 && peaksOfX.getOrDefault(minShapeXPoint.x - 1, 0) < minShapeXPoint.y
+            Direction.LEFT -> minX > 0 && maxShapeXPoints.none {
+                peaksOfX.getOrDefault(it.x - 1, emptySet()).contains(it.y)
+            }
+
 
             else -> throw IllegalArgumentException("Should not happen : $direction")
         }
     }
 
     private fun canFall(shape: Shape): Boolean {
-        return shape.getPoints().all { p ->
-            peaksOfX.getOrDefault(p.x, 0) + 1 < p.y
+        return shape.getPoints().none { p ->
+            peaksOfX.getValue(p.x).contains(p.y - 1)
         }
+
     }
 
     fun getPeak(): Int {
-        return this.peaksOfX.maxOf { it.value }
+        return this.peaksOfX.maxOf { it -> it.value.maxOf { it } }
     }
 }

@@ -18,7 +18,6 @@ class TetrisTest {
         tetris.play(1)
 
         Assertions.assertEquals(1, tetris.getPeak())
-        Assertions.assertEquals(1, tetris.peaksOfX[5])
     }
 
     @Test
@@ -78,9 +77,20 @@ class TetrisTest {
 
         val tetris = Tetris(generateSequence { ShapesGenerator.getDefaultShapes() }.flatMap { it }, createWind())
 
-        tetris.play(11)
+        tetris.play(5)
 
         Assertions.assertEquals(9, tetris.getPeak())
+    }
+
+    @Test
+    fun playTetrisWith2022Shapes() {
+
+
+        val tetris = Tetris(generateSequence { ShapesGenerator.getDefaultShapes() }.flatMap { it }, createWind())
+
+        tetris.play(2022)
+
+        Assertions.assertEquals(3068, tetris.getPeak())
     }
 
     private fun createWind(): Queue<Direction> {
