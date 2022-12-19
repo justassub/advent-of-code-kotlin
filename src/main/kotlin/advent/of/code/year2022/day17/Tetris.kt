@@ -54,12 +54,13 @@ class Tetris(private val infinityShapesGeneration: Sequence<(Point) -> Shape>, p
         val minX = shape.getPoints().minOf { it.x }
         val maxXShape = shape.getPoints().maxOf { it.x }
         val maxShapeXPoints = shape.getPoints().filter { it.x == maxXShape }
+        val minShapeXPoints = shape.getPoints().filter { it.x == minX }
         return when (direction) {
             Direction.RIGHT -> maxXShape < maxX && maxShapeXPoints.none {
                 peaksOfX.getOrDefault(it.x + 1, emptySet()).contains(it.y)
             }
 
-            Direction.LEFT -> minX > 0 && maxShapeXPoints.none {
+            Direction.LEFT -> minX > 0 && minShapeXPoints.none {
                 peaksOfX.getOrDefault(it.x - 1, emptySet()).contains(it.y)
             }
 
