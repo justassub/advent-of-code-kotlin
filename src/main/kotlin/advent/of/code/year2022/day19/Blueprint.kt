@@ -1,15 +1,28 @@
 package advent.of.code.year2022.day19
 
-import kotlin.math.max
+import advent.of.code.year2022.day19.entity.Machine
+import advent.of.code.year2022.day19.entity.Material
 
 data class Blueprint(
-    val oreRobotPrice: MaterialPrice,
-    val clayRobotPrice: MaterialPrice,
-    val obsidianRobotPrice: MaterialPrice,
-    val geodeRobotPrice: MaterialPrice
+    val prices: Map<Machine, Map<Material, Int>>
 ) {
-    val maxOresNeeded =
-        maxOf(oreRobotPrice.orePrice, clayRobotPrice.orePrice, obsidianRobotPrice.orePrice, geodeRobotPrice.orePrice)
-    val maxClaysNeeded = max(obsidianRobotPrice.orePrice, geodeRobotPrice.orePrice)
-    val maxObsidianNeeded = geodeRobotPrice.obsidianPrice
+    val maxOresNeeded = prices.values.maxOf { it.getOrDefault(Material.ORE, 0) }
+    val maxClaysNeeded = prices.values.maxOf { it.getOrDefault(Material.CLAY, 0) }
+    val maxObsidianNeeded = prices.values.maxOf { it.getOrDefault(Material.OBSIDIAN, 0) }
+
+    fun maximumMachinesNeed(machine: Machine): Int {
+        return when (machine) {
+            Machine.ORE_MACHINE -> maxOresNeeded
+            Machine.CLAY_MACHINE -> maxClaysNeeded
+            Machine.OBSIDIAN_MACHINE -> maxObsidianNeeded
+            Machine.GEODE_MACHINE -> Int.MAX_VALUE
+        }
+    }
+
+    fun hasEnoughResourcesToPurchaseMachine(machine: Machine, resources: Map<Material, Int>): Boolean {
+        return prices[machine]
+            ?.let { return it.all { r -> r.value <= resources.getOrDefault(r.key, 0) } }
+            ?: false
+    }
+
 }
