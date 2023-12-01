@@ -17,4 +17,18 @@ class CalibrationDocumentTest {
     fun findFirstAndLastNumbers(text: String, result: Int) {
         assertEquals(CalibrationDocument(text).calculateCalibrationValue(), result)
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        "4nineeightseven2,42",
+        "eightwothree,83",
+        "two1nine,29",
+        "xtwone3four,24",
+        "abcone2threexyz,13",
+        "zoneight234,14",
+        "7pqrstsixteen,76"
+    )
+    fun findFirstAndLastNumbersByText(text: String, result: Int) {
+        assertEquals(CalibrationDocument(text).calculateFixedLetterValue(), result)
+    }
 }

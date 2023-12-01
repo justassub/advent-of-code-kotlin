@@ -8,9 +8,14 @@ const val day = 1
 fun main() {
     val data = ContentReader.readFileAsLines(2023, 1)
 
-    data
+    val calibrationDocuments = data
         .map { CalibrationDocument(it) }
+    calibrationDocuments
         .sumOf { it.calculateCalibrationValue() }
+        .run { println(this) }
+
+    calibrationDocuments
+        .sumOf { it.calculateFixedLetterValue() }
         .run { println(this) }
 
 }
