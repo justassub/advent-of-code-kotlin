@@ -6,6 +6,11 @@ const val day = 1
 
 
 fun main() {
-    val data = ContentReader.readFileAsText(2023, 1)
-    TODO()
+    val data = ContentReader.readFileAsLines(2023, 1)
+
+    data
+        .map { CalibrationDocument(it) }
+        .sumOf { it.calculateCalibrationValue() }
+        .run { println(this) }
+
 }
