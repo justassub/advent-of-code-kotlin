@@ -17,4 +17,12 @@ fun main() {
         .filter { GameValidator.isGameValid(it, rules) }
         .sumOf { it.id }
         .run { println(this) }
+
+    data
+        .map { RuleFinder.findMinimumRulesForEachGame(it) }
+        .sumOf {
+            it.values.reduce { acc, el ->
+                acc * el
+            }
+        }.run { println(this) }
 }
