@@ -22,3 +22,27 @@ fun Point.recreateVertically(amount: Int) = Point(this.x, this.y + amount)
 
 operator fun Point.minus(point: Point) = Position(this.x - point.x, this.y - point.y)
 operator fun Point.plus(point: Point) = Position(this.x + point.x, this.y + point.y)
+
+
+fun Point.findNeighbours(): Set<Point> {
+    return setOf(
+        Point(this.x, this.y - 1),
+        Point(this.x, this.y + 1),
+        Point(this.x - 1, this.y),
+        Point(this.x + 1, this.y)
+    )
+}
+
+fun Point.findNeighboursDiagonal(): Set<Point> {
+    return setOf(
+        Point(this.x, this.y - 1),
+        Point(this.x, this.y + 1),
+        Point(this.x - 1, this.y),
+        Point(this.x + 1, this.y),
+
+        Point(this.x - 1, this.y - 1),
+        Point(this.x - 1, this.y + 1),
+        Point(this.x + 1, this.y - 1),
+        Point(this.x + 1, this.y + 1),
+    )
+}
