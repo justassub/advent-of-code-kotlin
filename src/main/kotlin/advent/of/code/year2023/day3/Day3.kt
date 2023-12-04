@@ -42,6 +42,10 @@ private fun createGroupedNumbers(data: Map<Point, Char>): List<NumberGroup> {
 
     (0..maxY)
         .forEach { y ->
+            if(singleGroup.isNotEmpty()){
+                groups.add(NumberGroup(singleGroup.toList()))
+                singleGroup.clear()
+            }
             singleGroup.clear()
             (0..maxX).forEach { x ->
                 val point = Point(x, y)
