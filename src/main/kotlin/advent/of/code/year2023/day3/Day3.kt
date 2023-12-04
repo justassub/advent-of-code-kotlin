@@ -1,3 +1,5 @@
+package advent.of.code.year2023.day3
+
 import advent.of.code.ContentReader
 import advent.of.code.util.Point
 import advent.of.code.util.PointBuilder
@@ -13,13 +15,20 @@ fun main() {
 
     groupedNumbers
         .filter { it.isPartNumber(data) }
-        .sumOf { g ->
-            g.value.map { it.second.digitToInt() }.joinToString("").toInt()
-        }
+        .sumOf { it.getNumericValue() }
         .run {
             println(this)
         }
 
+
+    data
+        .filter { it.value == '*' }
+        .map { gear -> gear to groupedNumbers.filter { it.isNeighbour(gear.key) } }
+        .filter { it.second.size == 2 }
+        .sumOf { gearValues -> gearValues.second.map { it.getNumericValue() }.reduce { acc, i -> acc * i } }
+        .run {
+            println(this)
+        }
 }
 
 
@@ -30,6 +39,15 @@ class NumberGroup(val value: List<Pair<Point, Char>>) {
             .filterNot { it.isDigit() }
             .any { it != '.' }
 
+    }
+
+    fun isNeighbour(point: Point): Boolean {
+        return value.flatMap { it.first.findNeighboursDiagonal() }
+            .any { it == point }
+    }
+
+    fun getNumericValue(): Int {
+        return value.map { it.second.digitToInt() }.joinToString("").toInt()
     }
 }
 
@@ -42,7 +60,7 @@ private fun createGroupedNumbers(data: Map<Point, Char>): List<NumberGroup> {
 
     (0..maxY)
         .forEach { y ->
-            if(singleGroup.isNotEmpty()){
+            if (singleGroup.isNotEmpty()) {
                 groups.add(NumberGroup(singleGroup.toList()))
                 singleGroup.clear()
             }
