@@ -44,7 +44,7 @@ object TreeScoreCalculator {
 
 }
 
-private fun <T> List<T>.takeWhileInclusive(predicate: (T) -> Boolean) = sequence {
+fun <T> Iterable<T>.takeWhileInclusive(predicate: (T) -> Boolean) = sequence {
     with(iterator()) {
         while (hasNext()) {
             val next = next()
