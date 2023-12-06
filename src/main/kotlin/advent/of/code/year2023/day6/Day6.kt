@@ -15,16 +15,16 @@ fun main() {
         .run { println(this) }
 
 
-//    val time = data.map { it.first }
-//        .joinToString("")
-//        .toLong()
-//
-//    val distance = data.map { it.second }
-//        .joinToString("")
-//        .toLong()
-//
-//    calculatePossibleWays(time,distance)
-//        .run { println(this) }
+    val time = data.map { it.first }
+        .joinToString("")
+        .toLong()
+
+    val distance = data.map { it.second }
+        .joinToString("")
+        .toLong()
+
+    calculatePossibleWays(time,distance)
+        .run { println(this) }
 
 }
 
