@@ -8,33 +8,33 @@ class MapFollower(
 ) {
 
 
-    fun calculateMinSteps(goal: String): Long {
-        var positionStart = "AAA" to 0L
+    fun calculateMinSteps(
+        startPosition: String,
+        cardMapFunction: (position: String) -> Boolean
+    ): Long {
+        var starting = startPosition to 0L
+        for (leftOrRight in generateSequence { stepsToFollow }.flatten()) {
+            starting = getNextGoal(starting, leftOrRight)
 
-        while (true) {
-            val result = calculateFirstOfGoalOrNull(positionStart)
-
-            if (result.any { it.first == goal }) {
-                return result.first { it.first == goal }.second
+            if (cardMapFunction(starting.first)) {
+                return starting.second
             }
-
-            positionStart = result.last()
         }
+        throw IllegalArgumentException("Should not happen")
     }
 
-    private fun calculateFirstOfGoalOrNull(startPosition: Pair<String, Long>): List<Pair<String, Long>> {
-        return stepsToFollow.runningFold(
-            initial = startPosition
-        ) { acc, leftOrRight ->
-            val goal = acc.first
-            val nextGoalWays = map[goal]!!
 
-            if (leftOrRight == LeftOrRight.LEFT) {
-                Pair(nextGoalWays.first, acc.second + 1)
-            } else {
-                Pair(nextGoalWays.second, acc.second + 1)
-            }
+    private fun getNextGoal(
+        acc: Pair<String, Long>,
+        leftOrRight: LeftOrRight
+    ): Pair<String, Long> {
+        val goal = acc.first
+        val nextGoalWays = map[goal]!!
+
+        return if (leftOrRight == LeftOrRight.LEFT) {
+            Pair(nextGoalWays.first, acc.second + 1)
+        } else {
+            Pair(nextGoalWays.second, acc.second + 1)
         }
-
     }
 }

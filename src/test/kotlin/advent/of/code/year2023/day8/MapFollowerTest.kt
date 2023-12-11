@@ -14,7 +14,7 @@ class MapFollowerTest {
                 "CCC" to ("ZZZ" to "GGG")
             ),
             listOf(LeftOrRight.RIGHT, LeftOrRight.LEFT)
-        ).calculateMinSteps("ZZZ")
+        ).calculateMinSteps("AAA") { it == "ZZZ" }
 
 
         assertEquals(
@@ -31,7 +31,7 @@ class MapFollowerTest {
                 "ZZZ" to ("ZZZ" to "ZZZ")
             ),
             listOf(LeftOrRight.LEFT, LeftOrRight.LEFT, LeftOrRight.RIGHT)
-        ).calculateMinSteps("ZZZ")
+        ).calculateMinSteps("AAA") { it == "ZZZ" }
 
 
         assertEquals(
