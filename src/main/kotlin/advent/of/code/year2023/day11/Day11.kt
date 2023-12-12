@@ -10,9 +10,12 @@ import kotlin.math.absoluteValue
 fun main() {
     val points = createPointsFromFile(2023, 11)
 
-    val expandedGalaxies = expandGalaxy(points)
+    val expandedGalaxies = expandGalaxy(points, 1)
+
+    val expandedGalaxiesPart2 = expandGalaxy(points, 1000000 - 1)
 
     calculateDistanceSum(expandedGalaxies)
+    calculateDistanceSum(expandedGalaxiesPart2)
 }
 
 private fun calculateDistanceSum(expandedGalaxies: List<LargePoint>) {
@@ -22,7 +25,7 @@ private fun calculateDistanceSum(expandedGalaxies: List<LargePoint>) {
 }
 
 
-fun expandGalaxy(points: Map<Point, Char>): List<LargePoint> {
+fun expandGalaxy(points: Map<Point, Char>, expandBy: Long): List<LargePoint> {
     val galaxies = points.filter { it.value == '#' }.map { it.key }
     val galaxiesX = galaxies.map { it.x }.distinct()
     val galaxiesY = galaxies.map { it.y }.distinct()
@@ -39,8 +42,8 @@ fun expandGalaxy(points: Map<Point, Char>): List<LargePoint> {
     return galaxies
         .map { g ->
             LargePoint(
-                x = g.x.toLong() +   expandTheseX.count { it < g.x },
-                y = g.y.toLong() +   expandTheseY.count { it < g.y }
+                x = g.x.toLong() + expandTheseX.count { it < g.x } * expandBy,
+                y = g.y.toLong() + expandTheseY.count { it < g.y } * expandBy
             )
         }
 }
