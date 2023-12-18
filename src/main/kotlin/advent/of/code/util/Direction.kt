@@ -1,5 +1,17 @@
 package advent.of.code.util
 
+
+
+fun Char.createDirection(): Direction {
+    return when (this) {
+        'R' -> Direction.RIGHT
+        'U' -> Direction.UP
+        'L' -> Direction.LEFT
+        'D' -> Direction.DOWN
+        else -> throw IllegalArgumentException("Bad character $this")
+    }
+}
+
 enum class Direction {
     UP, RIGHT, DOWN, LEFT
 }
