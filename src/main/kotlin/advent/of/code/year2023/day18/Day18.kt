@@ -1,27 +1,45 @@
 package advent.of.code.year2023.day18
 
 import advent.of.code.ContentReader
-import advent.of.code.util.Direction
-import advent.of.code.util.Point
-import advent.of.code.util.createDirection
-import advent.of.code.util.printResult
+import advent.of.code.util.*
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val lines = ContentReader.readFileAsLines(2023, 18)
+    val points = ContentReader.readFileAsLines(2023, 18)
         .map { it.split(" ") }
         .map { createSinglePlanInput(it) }
         .runningFold(Marker(Point(0, 0), Point(0, 0), "START")) { start: Marker, digitInput: DigitInput ->
             createNextMarker(start, digitInput)
         }
+        .flatMap { findAllPointsInMarker(it) }
+        .toSet()
 
-
-    println()
+    findDiggedArea(points)
+        .count()
+        .printResult()
 }
 
+private fun findDiggedArea(points: Set<Point>): Set<Point> {
+    val visited = points.toMutableSet()
+    val queue = LinkedList(listOf(Point(3, 1)))
 
+    while (queue.isNotEmpty()) {
+        val point = queue.poll()
+        val neighbours = point.findNeighbours()
+            .filterNot { visited.contains(it) }
+        visited.addAll(neighbours)
+        queue.addAll(neighbours)
+    }
 
+    return visited
+}
+
+fun findAllPointsInMarker(point: Marker): List<Point> {
+    return (min(point.start.x, point.finish.x)..max(point.start.x, point.finish.x))
+        .flatMap { x -> (min(point.start.y, point.finish.y)..max(point.start.y, point.finish.y)).map { Point(x, it) } }
+}
 
 
 fun createNextMarker(start: Marker, digitInput: DigitInput): Marker {
