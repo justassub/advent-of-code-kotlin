@@ -55,3 +55,6 @@ fun Point.findNeighboursDiagonal(): Set<Point> {
         Point(this.x + 1, this.y + 1),
     )
 }
+
+
+
