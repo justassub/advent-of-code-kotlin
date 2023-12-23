@@ -16,4 +16,11 @@ object ContentReader {
         return ContentReader::class.java.getResource("/year$year/day$day.txt")
             .readText(Charsets.UTF_8)
     }
+
+    fun readAsGroupOfLinesSplitByEmptyLine(year: Int, day: Int): List<List<String>> {
+        return readFileAsText(year, day)
+            .trim()
+            .split("\n\n")
+            .map { it.trim().split("\n") }
+    }
 }

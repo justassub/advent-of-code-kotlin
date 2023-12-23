@@ -1,13 +1,22 @@
 package advent.of.code.util
 
 
+fun Char.isDirection(): Boolean =
+    try {
+        createDirection()
+        true
+    } catch (e: IllegalArgumentException) {
+        false
+    }
+
 
 fun Char.createDirection(): Direction {
     return when (this) {
-        'R' -> Direction.RIGHT
-        'U' -> Direction.UP
-        'L' -> Direction.LEFT
-        'D' -> Direction.DOWN
+        'R', '>' -> Direction.RIGHT
+        'U', '^' -> Direction.UP
+        'L', '<' -> Direction.LEFT
+        'D', 'v' -> Direction.DOWN
+
         else -> throw IllegalArgumentException("Bad character $this")
     }
 }
