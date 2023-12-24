@@ -3,6 +3,8 @@ package advent.of.code.util
 import advent.of.code.year2022.day17.Movable
 import advent.of.code.year2022.day9.Position
 
+data class BigPoint(val x: Long, val y: Long)
+
 data class Point(var x: Int, var y: Int) : Movable {
     override fun move(direction: Direction) {
         when (direction) {
