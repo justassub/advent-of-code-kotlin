@@ -14,3 +14,7 @@ out/
 
 /src/main/kotlin/advent/of/code/year2021/day25/
 /src/test/kotlin/advent/of/code/year2021/day25/
+
+
+### ADVENT OF CODE MATERIAL###
+/src/main/resources/**
