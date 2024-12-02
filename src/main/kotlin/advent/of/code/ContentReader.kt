@@ -23,4 +23,13 @@ object ContentReader {
             .split("\n\n")
             .map { it.trim().split("\n") }
     }
+
+    fun readFileWithSeparator(year: Int, day: Int, separator: String): List<List<String>> {
+        return readFileAsLines(year, day)
+            .map { it.split(separator) }
+    }
+    fun readFileAsMultipleNumbersInLine(year: Int, day: Int, separator: String):List<List<Int>>{
+        return readFileWithSeparator(year, day, separator)
+            .map { it.map { it.toInt() } }
+    }
 }
