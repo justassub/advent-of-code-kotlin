@@ -9,47 +9,32 @@ val DONT = "don't()"
 fun main() {
     val text = ContentReader.readFileAsText(2024, 3)
 
-  findAllValidMultCommands(text)
+    findAllValidMultCommands(text)
         .sumOf { it.first * it.second }
         .printResult()
 
-
-findAllValidCommands(text)
+    findAllIgnoredCommands(text)
+        .foldRight(text) { line, seed -> seed.replace(line, "") }
+        .let { findAllValidMultCommands(it) }
         .sumOf { it.first * it.second }
         .printResult()
 
 }
 
-fun findAllValidCommands(
-    text: String
-): List<Pair<Long, Long>> {
-    var textToValidate = text
-
-    val validableText = mutableListOf<String>()
-
-    while (textToValidate.isNotBlank()) {
-        val nextDont = textToValidate.indexOf(DONT)
-        if (nextDont == -1) {
-            validableText.add(textToValidate)
+fun findAllIgnoredCommands(text: String): List<String> {
+    val ignoredCommands = mutableListOf<String>()
+    var nextStop = text.indexOf(DONT)
+    while (true) {
+        val nextStart = text.indexOf(DO, nextStop)
+        if (nextStart == -1) {
+            ignoredCommands.add(text.substring(nextStop))
             break
         }
-
-        val validText = textToValidate.substring(0, nextDont)
-
-        validableText.add(validText)
-        textToValidate = textToValidate.substring(validText.length)
-
-        val nextDo = textToValidate.indexOf(DO)
-        if (nextDo == -1) {
-            break
-        }
-        val notValidText = textToValidate.substring(0, nextDo + DO.length)
-        textToValidate = textToValidate.substring(notValidText.length)
+        ignoredCommands.add(text.substring(nextStop, nextStart))
+        nextStop = text.indexOf(DONT, nextStart)
     }
-
-    return validableText.flatMap { findAllValidMultCommands(it) }
+    return ignoredCommands
 }
-
 
 fun findAllValidMultCommands(text: String): List<Pair<Long, Long>> {
     val regex = Regex("mul\\((\\d+),(\\d+)\\)")
