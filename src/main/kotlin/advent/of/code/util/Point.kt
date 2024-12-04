@@ -31,6 +31,19 @@ fun Point.recreateByDirectionReverse(direction: Direction): Point {
     }
 }
 
+fun Point.recreateByDirectionReverse(direction: ALLDirections): Point {
+    return when (direction) {
+        ALLDirections.UP -> recreateVertically(-1)
+        ALLDirections.RIGHT -> recreateHorizontally(1)
+        ALLDirections.DOWN -> recreateVertically(1)
+        ALLDirections.LEFT -> recreateHorizontally(-1)
+        ALLDirections.UP_RIGHT -> recreateVertically(-1).recreateHorizontally(1)
+        ALLDirections.UP_LEFT -> recreateVertically(-1).recreateHorizontally(-1)
+        ALLDirections.DOWN_RIGHT -> recreateVertically(1).recreateHorizontally(1)
+        ALLDirections.DOWN_LEFT -> recreateVertically(1).recreateHorizontally(-1)
+    }
+}
+
 operator fun Point.minus(point: Point) = Position(this.x - point.x, this.y - point.y)
 operator fun Point.plus(point: Point) = Position(this.x + point.x, this.y + point.y)
 
