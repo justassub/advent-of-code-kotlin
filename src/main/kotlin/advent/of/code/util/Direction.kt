@@ -1,5 +1,6 @@
 package advent.of.code.util
 
+val clockWiseDirections = listOf(Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT)
 
 fun Char.isDirection(): Boolean =
     try {
@@ -21,12 +22,31 @@ fun Char.createDirection(): Direction {
     }
 }
 
-enum class  ALLDirections {
+enum class ALLDirections {
     UP, RIGHT, DOWN, LEFT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT
 }
+
 enum class Direction {
-    UP, RIGHT, DOWN, LEFT
+    UP, RIGHT, DOWN, LEFT;
+
+    fun nextDirectionClockWise(): Direction {
+        return when (this) {
+            UP -> RIGHT
+            RIGHT -> DOWN
+            DOWN -> LEFT
+            LEFT -> UP
+        }
+    }
+    fun reverseDirection(): Direction {
+        return when (this) {
+            UP -> DOWN
+            RIGHT -> LEFT
+            DOWN -> UP
+            LEFT -> RIGHT
+        }
+    }
 }
+
 
 enum class LeftOrRight {
     LEFT, RIGHT

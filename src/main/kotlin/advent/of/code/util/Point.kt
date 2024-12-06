@@ -2,6 +2,8 @@ package advent.of.code.util
 
 import advent.of.code.year2022.day17.Movable
 import advent.of.code.year2022.day9.Position
+import kotlin.math.max
+import kotlin.math.min
 
 data class BigPoint(val x: Long, val y: Long)
 
@@ -71,5 +73,89 @@ fun Point.findNeighboursDiagonal(): Set<Point> {
     )
 }
 
+
+/**
+ * returns points that points collect by sliding to direction by map and info if it reached to obstacle or end of map
+ */
+fun slideToDirectionByMapToObstacleHistory(
+    currentPosition: Point,
+    direction: Direction,
+    obs: Set<Point>,
+    maxX: Int,
+    maxY: Int,
+    minX: Int,
+    minY: Int
+): Pair<Pair<Point, Boolean>, Set<Point>> {
+    val nextObs = obs.findNextObs(currentPosition, direction)
+
+    if (nextObs == null) {
+        val nextMapLocation = createMapStopPoint(currentPosition, direction, maxX, maxY, minX, minY)
+        return (nextMapLocation to true) to createHistoryOfPointMigration(currentPosition, nextMapLocation)
+    }
+    val reverseDirection = direction.reverseDirection()
+    val location = nextObs.recreateByDirectionReverse(reverseDirection)
+    return (location to false) to createHistoryOfPointMigration(currentPosition, location)
+}
+
+
+/**
+ * returns points that points collect by sliding to direction by map and info if it reached to obstacle or end of map
+ */
+fun slideToDirectionByMapToObstacleNoHistory(
+    currentPosition: Point,
+    direction: Direction,
+    obs: Set<Point>,
+    maxX: Int,
+    maxY: Int,
+    minX: Int,
+    minY: Int
+): Pair<Point, Boolean> {
+    val nextObs = obs.findNextObs(currentPosition, direction)
+
+
+    if (nextObs == null) {
+        val nextMapLocation = createMapStopPoint(currentPosition, direction, maxX, maxY, minX, minY)
+
+        return nextMapLocation to true
+    }
+
+    val reverseDirection = direction.reverseDirection()
+    return nextObs.recreateByDirectionReverse(reverseDirection) to false
+}
+
+fun createMapStopPoint(
+    current: Point,
+    direction: Direction,
+    maxX: Int,
+    maxY: Int,
+    minX: Int,
+    minY: Int
+): Point {
+    return when (direction) {
+        Direction.UP -> Point(current.x, minY)
+        Direction.DOWN -> Point(current.x, maxY)
+        Direction.LEFT -> Point(current.y, minX)
+        Direction.RIGHT -> Point(current.y, maxX)
+    }
+}
+
+fun Set<Point>.findNextObs(location: Point, direction: Direction): Point? {
+    return when (direction) {
+        Direction.UP -> this.filter { it.x == location.x && it.y < location.y }.maxByOrNull { it.y }
+        Direction.DOWN -> this.filter { it.x == location.x && it.y > location.y }.minByOrNull { it.y }
+        Direction.LEFT -> this.filter { it.y == location.y && it.x < location.x }.maxByOrNull { it.x }
+        Direction.RIGHT -> this.filter { it.y == location.y && it.x > location.x }.minByOrNull { it.x }
+    }
+}
+
+
+fun createHistoryOfPointMigration(point: Point, point2: Point): Set<Point> {
+    return (min(point.x, point2.x)..max(point.x, point2.x))
+        .flatMap { x ->
+            ((min(point.y, point2.y))..max(point.y, point2.y))
+                .map { y -> Point(x, y) }
+        }.toSet()
+
+}
 
 
