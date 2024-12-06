@@ -33,7 +33,7 @@ class Labyrint(
     fun isInfiniteLoop(): Boolean {
         while (true) {
             player = moveToNextLocation() ?: return false
-            direction = direction.nextDirectionClockWise()
+            direction = newDirectionSupplier(direction)
 
             if (history.add(player to direction).not()) {
                 return true
