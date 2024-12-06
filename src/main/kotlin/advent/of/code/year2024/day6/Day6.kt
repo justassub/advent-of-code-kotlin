@@ -19,9 +19,9 @@ fun main() {
             .count()
             .printResult()
 
-        findVisitedLocationsToExit.count {
+        findVisitedLocationsToExit.parallelStream().filter {
             Labyrint(player, obstacles + it).isInfiniteLoop()
-        }.printResult()
+        }.count().printResult()
     }.printResult()
 
 }
