@@ -12,22 +12,24 @@ fun main() {
         .map { it[0] to it[1] }
 
 
+    solveDay(lines, listOf("+", "*"))
+}
+
+private fun solveDay(lines: List<Pair<String, String>>, possibleVariants: List<String>) {
     val possibleCombinations = lines
         .map {
             it.first.toLong() to
                     ListBuilder.buildPossibleCombinationsFromString(
                         it.second,
                         " ",
-                        listOf("+", "*")
+                        possibleVariants
                     ).map { it.replace("|", " ") }
         }
 
 
-   possibleCombinations
+    possibleCombinations
         .map { it.first to it.second.map { expression -> MathUtil.solveEvaluationWithoutParenthesesNoPriority(expression) } }
         .filter { it.second.contains(it.first) }
         .sumOf { it.first }
         .printResult()
-
-    println()
 }
