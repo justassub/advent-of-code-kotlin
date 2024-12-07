@@ -9,16 +9,30 @@ import advent.of.code.util.printResult
 fun main() {
     val lines = ContentReader.readFileAsLines(2024, 7)
         .map { it.split(": ") }
-        .map { it[0] to it[1] }
+        .map { it[0].toLong() to it[1] }
 
 
-    solveDay(lines, listOf("+", "*"))
+    val possibleLines1 = solveDay(lines, listOf("+", "*"))
+        .map { it.first }
+        .toSet()
+    val part1Answer = possibleLines1
+        .sum()
+
+    part1Answer.printResult()
+
+    (part1Answer + solveDay(
+        lines.filter { possibleLines1.contains(it.first).not() },
+        listOf("+", "*", "concatenation")
+    ).sumOf { it.first }
+            ).printResult()
+
+
 }
 
-private fun solveDay(lines: List<Pair<String, String>>, possibleVariants: List<String>) {
+private fun solveDay(lines: List<Pair<Long, String>>, possibleVariants: List<String>): List<Pair<Long, List<Long>>> {
     val possibleCombinations = lines
         .map {
-            it.first.toLong() to
+            it.first to
                     ListBuilder.buildPossibleCombinationsFromString(
                         it.second,
                         " ",
@@ -27,9 +41,7 @@ private fun solveDay(lines: List<Pair<String, String>>, possibleVariants: List<S
         }
 
 
-    possibleCombinations
+    return possibleCombinations
         .map { it.first to it.second.map { expression -> MathUtil.solveEvaluationWithoutParenthesesNoPriority(expression) } }
         .filter { it.second.contains(it.first) }
-        .sumOf { it.first }
-        .printResult()
 }

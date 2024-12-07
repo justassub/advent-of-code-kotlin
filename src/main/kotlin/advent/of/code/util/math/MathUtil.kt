@@ -13,6 +13,7 @@ object MathUtil {
                     "-" -> acc - number.toLong()
                     "*" -> acc * number.toLong()
                     "/" -> acc / number.toLong()
+                    "concatenation" -> "$acc$number".toLong()
                     else -> throw IllegalArgumentException("Unknown operator: $operator")
                 }
             }
