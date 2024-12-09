@@ -159,3 +159,45 @@ fun createHistoryOfPointMigration(point: Point, point2: Point): Set<Point> {
 }
 
 
+fun createPointsMirrorView(point1: Point, point2: Point): List<Point> {
+    val (higherX, lowerX) = if (point1.x > point2.x) {
+        point1 to point2
+    } else {
+        point2 to point1
+    };
+
+    val (higherY, lowerY) = if (point1.y > point2.y) {
+        point1 to point2
+    } else {
+        point2 to point1
+    };
+
+    return when {
+        point1.x == point2.x && point1.y == point2.y -> throw IllegalArgumentException("Not supported");
+        point1.y == point2.y -> {
+            val xDiff = higherX.x - lowerX.x
+            listOf(
+                Point(lowerX.x - xDiff, lowerX.y),
+                Point(higherX.x + xDiff, higherX.y)
+            )
+        }
+
+        point1.x == point2.x -> {
+            val yDiff = higherY.y - lowerY.y
+            listOf(
+                Point(lowerX.x, lowerX.y - yDiff),
+                Point(higherX.x, higherX.y + yDiff)
+            )
+        }
+
+        else -> {
+            val xDiff = higherY.x - lowerY.x
+            val yDiff = higherY.y - lowerY.y
+            listOf(
+                Point(lowerY.x - xDiff, lowerY.y - yDiff),
+                Point(higherY.x + xDiff, higherY.y + yDiff)
+            )
+        }
+    }
+}
+
