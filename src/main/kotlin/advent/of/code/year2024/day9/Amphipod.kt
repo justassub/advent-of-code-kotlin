@@ -12,6 +12,37 @@ class Amphipod(val data: String) {
         .mapNotNull { createFileSequanceWithInts(it) }
 
 
+    fun compactBlocksFixedMoreStrick(): List<Int?> {
+        val list = blockRepresentation.map { it.toMutableList() }
+        val blocks = LinkedList(list)
+
+        while (blocks.isNotEmpty()) {
+            val nextElement: MutableList<Int?> = blocks.removeLastOrNull() ?: break
+            if (!nextElement.contains(null)) {
+                val replaceElements = list.firstOrNull { it.filter { e -> e == null }.size >= nextElement.size }
+                if (replaceElements == null) {
+                    continue
+                }
+                if (list.indexOf(replaceElements) > list.indexOf(nextElement)) {
+                    continue
+                }
+                val firstNullIndex = replaceElements.indexOf(null)
+                val lastNullIndex = firstNullIndex + nextElement.size - 1
+                val digits = nextElement.first()
+                (firstNullIndex..lastNullIndex).forEach {
+                    replaceElements[it] = digits
+                }
+                // make elements null in nextElement list
+                nextElement.indices.forEach {
+                    nextElement[it] = null
+                }
+
+            }
+        }
+
+        return list.flatten()
+    }
+
     fun compactBlocksFixed(): List<Int> {
         val blocks = LinkedList(blockRepresentation.flatten())
         val compact = mutableListOf<Int>()
@@ -33,10 +64,6 @@ class Amphipod(val data: String) {
             }
         }
         return compact
-    }
-
-    fun compactBlocksFixedMoreStrick(): List<Int?> {
-        TODO()
     }
 
 
