@@ -15,4 +15,23 @@ object PointBuilder {
         return ContentReader.readFileAsLines(year, day)
             .let(::createPointsWithValuesFromLines)
     }
+
+    fun <T> traversablePointsFromMapSimpleDirections(
+        map: Map<Point, Char>,
+        transformFunction: (Char) -> T
+    ): Set<TraversablePoint<T>> {
+        val points = map
+            .map { (point, value) ->
+                TraversablePoint(transformFunction(value), point)
+            }
+
+        val pointWithTraversablePoint = points.associateBy { it.point }
+
+        points.forEach { p ->
+            p.point.findNeighbours().filter { map.containsKey(it) }
+                .map { pointWithTraversablePoint[it]!! }
+                .let { p.setNeighbours(it.toSet()) }
+        }
+        return points.toSet()
+    }
 }
