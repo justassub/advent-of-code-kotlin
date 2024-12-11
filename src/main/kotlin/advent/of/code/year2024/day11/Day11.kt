@@ -7,7 +7,9 @@ fun main() {
     val input = ContentReader.readFileAsMultipleNumbersInLine(2024, 11, " ")
         .flatMap { it.map { it.toLong() } }
     val result1 = produceStones(input, 25)
+    val result2 = produceStones(input, 75)
     printResult(result1)
+    printResult(result2)
 }
 
 private fun printResult(result: Map<StoneId, Long>) {
