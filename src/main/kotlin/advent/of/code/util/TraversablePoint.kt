@@ -14,4 +14,10 @@ data class TraversablePoint<T>(val value: T, val point: Point) {
     fun setNeighbours(neighbours: Set<TraversablePoint<T>>) {
         this.neighbours = neighbours
     }
+
+    fun collectAllJoiningPoints(alreadyCollected: MutableSet<TraversablePoint<T>> = mutableSetOf()) {
+        return findAllNeighbours()
+            .filter { alreadyCollected.add(it) }
+            .forEach { it.collectAllJoiningPoints(alreadyCollected) }
+    }
 }

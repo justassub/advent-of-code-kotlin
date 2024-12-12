@@ -18,7 +18,15 @@ object PointBuilder {
 
     fun <T> traversablePointsFromMapSimpleDirections(
         map: Map<Point, Char>,
-        transformFunction: (Char) -> T
+        transformFunction: (Char) -> T,
+    ): Set<TraversablePoint<T>> {
+        return traversablePointsFromMapSimpleDirections(map, transformFunction) { _, _ -> true }
+    }
+
+    fun <T> traversablePointsFromMapSimpleDirections(
+        map: Map<Point, Char>,
+        transformFunction: (Char) -> T,
+        filterNeighboursFunction: (TraversablePoint<T>, TraversablePoint<T>) -> Boolean
     ): Set<TraversablePoint<T>> {
         val points = map
             .map { (point, value) ->
@@ -28,7 +36,9 @@ object PointBuilder {
         val pointWithTraversablePoint = points.associateBy { it.point }
 
         points.forEach { p ->
-            p.point.findNeighbours().filter { map.containsKey(it) }
+            p.point.findNeighbours()
+                .filter { map.containsKey(it) }
+                .filter { filterNeighboursFunction(p, pointWithTraversablePoint[it]!!) }
                 .map { pointWithTraversablePoint[it]!! }
                 .let { p.setNeighbours(it.toSet()) }
         }
