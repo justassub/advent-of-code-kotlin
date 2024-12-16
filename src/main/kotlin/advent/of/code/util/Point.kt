@@ -17,6 +17,15 @@ data class Point(var x: Int, var y: Int) : Movable {
         }
     }
 
+     fun moveReverse(direction: Direction) {
+        when (direction) {
+            Direction.UP -> this.y--
+            Direction.RIGHT -> this.x++
+            Direction.DOWN -> this.y++
+            Direction.LEFT -> this.x--
+        }
+    }
+
 }
 
 
