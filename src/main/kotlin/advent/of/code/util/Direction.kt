@@ -37,12 +37,31 @@ enum class Direction {
             LEFT -> UP
         }
     }
+
     fun reverseDirection(): Direction {
         return when (this) {
             UP -> DOWN
             RIGHT -> LEFT
             DOWN -> UP
             LEFT -> RIGHT
+        }
+    }
+
+    fun rotate90DegreesBothSide(): Set<Direction> {
+        return when (this) {
+            UP -> setOf(RIGHT, LEFT)
+            RIGHT -> setOf(DOWN, UP)
+            DOWN -> setOf(LEFT, RIGHT)
+            LEFT -> setOf(UP, DOWN)
+        }
+    }
+
+    fun rotate90DegreesBothSideIncludeSelf(): Set<Direction> {
+        return when (this) {
+            UP -> setOf(UP, RIGHT, LEFT)
+            RIGHT -> setOf(RIGHT, DOWN, UP)
+            DOWN -> setOf(DOWN, LEFT, RIGHT)
+            LEFT -> setOf(LEFT, UP, DOWN)
         }
     }
 }

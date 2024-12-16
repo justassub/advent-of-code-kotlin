@@ -7,6 +7,13 @@ data class TraversablePoint<T>(val value: T, val point: Point) {
         return neighbours
     }
 
+    fun findNextNeighbourByDirection(
+        direction: Direction,
+        predicate: (TraversablePoint<T>) -> Boolean = { true }
+    ): TraversablePoint<T>? {
+        return neighbours.firstOrNull { it.point == this.point.recreateByDirectionReverse(direction) && predicate(it) }
+    }
+
     fun findNeighbours(predicate: (TraversablePoint<T>) -> Boolean): Collection<TraversablePoint<T>> {
         return neighbours.filter(predicate)
     }
