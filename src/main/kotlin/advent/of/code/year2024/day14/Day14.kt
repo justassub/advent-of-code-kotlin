@@ -8,16 +8,21 @@ const val Y_MAX = 103
 const val xHalf = (X_MAX / 2)
 const val yHalf = (Y_MAX / 2)
 
-const val SECONDS = 100
+const val SECONDS = 10000
 
 
 fun main() {
     val robots = ContentReader.readFileAsLines(2024, 14)
         .map(::constructRobotFromLine)
+        .toSet()
 
     repeat(SECONDS) {
-        println("Round: $it")
         robots.forEach(Robot::move)
+        val text = printGraph(robots)
+        if(text.contains("#########")) {
+            println("Round: $it")
+            println(text)
+        }
 
     }
     val quarant1 = robots.count { it.x < xHalf && it.y < yHalf }
@@ -65,16 +70,19 @@ data class Robot(var x: Int, var y: Int, val speedX: Int, val speedY: Int) {
 
 }
 
-fun printGraph(robots: List<Robot>) {
-    val points = robots.map { it.x to it.y }
+fun printGraph(robots: Set<Robot>): String {
+    val points = robots.map { it.x to it.y }.toSet()
+    val stringBuilder = StringBuilder()
     for (y in 0..<Y_MAX) {
         for (x in 0..<X_MAX) {
             if (points.contains(x to y)) {
-                print("#")
+                stringBuilder.append("#")
             } else {
-                print(".")
+                stringBuilder.append(".")
             }
         }
-        println()
+        stringBuilder.append("\n")
     }
+    return stringBuilder.toString()
+
 }
