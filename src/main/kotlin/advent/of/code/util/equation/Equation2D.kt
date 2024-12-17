@@ -1,6 +1,6 @@
 package advent.of.code.util.equation
 
-data class Equation(val x: Int, val y: Int, val c: Int)
+data class Equation(val x: Long, val y: Long, val c: Long)
 data class Equation2D(val equation1: Equation, val equation2: Equation) {
 
     fun solve(): Pair<Double, Double> {
@@ -10,4 +10,10 @@ data class Equation2D(val equation1: Equation, val equation2: Equation) {
                 (equation1.x * equation2.y - equation2.x * equation1.y)
         return Pair(x, y)
     }
+}
+
+
+fun Pair<Double, Double>.canBeSolved(): Boolean {
+    val (n1, n2) = this
+    return n1.toLong().toDouble() == n1 && n2.toLong().toDouble() == n2
 }
