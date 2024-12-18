@@ -1,9 +1,6 @@
 package advent.of.code.year2024.day18
 
-import advent.of.code.util.Direction
-import advent.of.code.util.Point
-import advent.of.code.util.PointBuilder
-import advent.of.code.util.recreateByDirectionReverse
+import advent.of.code.util.*
 import kotlin.math.min
 
 val minimumX = 0
@@ -18,10 +15,14 @@ fun pointInBounds(point: Point): Boolean {
 }
 
 fun main() {
-    val corruptedPoints = PointBuilder.createPointsWithValuesFromLinesText(2024, 18, ",")
-        .take(allowBlocks)
-        .toSet()
+    val corruptedPointsAll = PointBuilder.createPointsWithValuesFromLinesText(2024, 18, ",")
 
+    val stock = corruptedPointsAll
+        .drop(allowBlocks)
+
+    val corruptedPoints = corruptedPointsAll
+        .take(allowBlocks)
+        .toMutableSet()
     val player = Point(minimumX, minimumY)
     val goal = Point(maximumX, maximumY)
     var minScore = Integer.MAX_VALUE
@@ -33,6 +34,21 @@ fun main() {
         minScore = min(minScore, it.score)
     }
     println(minScore)
+
+    stock
+        .first {
+            var validPath = false
+            corruptedPoints.add(it)
+            findPathSimple(
+                player,
+                goal,
+                corruptedPoints
+            ) {
+                validPath = true
+            }
+            !validPath
+        }.printResult()
+
 }
 
 
@@ -42,7 +58,7 @@ fun findPathSimple(
     blocks: Set<Point>,
     onGoal: (PointPathFinder) -> Unit
 ) {
-    val queue = mutableListOf(PointPathFinder(start, 0, setOf(start)))
+    val queue = mutableListOf(PointPathFinder(start, 0))
     val visited = mutableMapOf<Point, Int>()
     while (queue.isNotEmpty()) {
         val current = queue.removeFirst()
@@ -58,12 +74,12 @@ fun findPathSimple(
             .map { current.point.recreateByDirectionReverse(it) }
             .filter { pointInBounds(it) }
             .filter { it !in blocks }
-            .map { PointPathFinder(it, current.score + 1, current.path + it) }
+            .map { PointPathFinder(it, current.score + 1) }
         possibleDestinations
             .forEach(queue::add)
     }
 
 }
 
-data class PointPathFinder(val point: Point, val score: Int, val path: Set<Point>)
+data class PointPathFinder(val point: Point, val score: Int)
 
