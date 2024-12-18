@@ -4,6 +4,12 @@ import advent.of.code.ContentReader
 
 object PointBuilder {
 
+    fun createPointsWithValuesFromLinesText(year: Int, day: Int, separator: String): List<Point> {
+        return ContentReader.readFileAsLines(year, day)
+            .map { it.split(separator) }
+            .map { Point(it.first().toInt(), it[1].toInt()) }
+
+    }
 
     fun createPointsWithValuesFromLines(lines: List<String>): Map<Point, Char> {
         return lines
