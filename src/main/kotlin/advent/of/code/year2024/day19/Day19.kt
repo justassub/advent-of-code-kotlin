@@ -22,7 +22,7 @@ fun main() {
 private class Design(val towels: Set<Towel>, val originalMaterial: String) {
 
     private fun findUsefulTowels(mat: String) = towels
-        .filter { mat.contains(it) }
+        .filter { mat.startsWith(it) }
 
     fun canBeCrafted(): Boolean {
         return craft(originalMaterial)
