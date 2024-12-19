@@ -14,26 +14,43 @@ fun main() {
     val designs = ContentReader.readFileAsLines(2024, 199)
         .map { Design(towels, it) }
 
-    designs.count { it.canBeCrafted() }
+    val designsCanBeCraftedInWays = designs.map { it.canBeCraftedWays() }
+
+    designsCanBeCraftedInWays.count { it > 0 }
+        .printResult()
+
+    designsCanBeCraftedInWays.sum()
         .printResult()
 }
 
 
 private class Design(val towels: Set<Towel>, val originalMaterial: String) {
+    companion object {
+        val cache: MutableMap<String, Long> = mutableMapOf()
+    }
 
     private fun findUsefulTowels(mat: String) = towels
         .filter { mat.startsWith(it) }
 
-    fun canBeCrafted(): Boolean {
-        return craft(originalMaterial)
+    fun canBeCraftedWays(): Long {
+        return craftWays(originalMaterial)
     }
 
-    private fun craft(leftMaterial: String): Boolean {
-        val towelsCanBeUsed = findUsefulTowels(leftMaterial)
-        return towelsCanBeUsed
+    private fun craftWays(leftMaterial: String): Long {
+        if (cache.containsKey(leftMaterial)) {
+            return cache[leftMaterial]!!
+        }
+        return cache[leftMaterial] ?: findUsefulTowels(leftMaterial)
             .map { leftMaterial.replaceFirst(it, "") }
-            .any {
-                it.isEmpty() || craft(it)
+            .sumOf {
+                when {
+                    it.isEmpty() -> 1L
+                    else -> craftWays(it)
+                }
+            }
+            .let {
+                cache[leftMaterial] = it
+                it
             }
     }
 }
