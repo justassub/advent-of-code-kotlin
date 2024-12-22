@@ -10,10 +10,10 @@ fun main() {
 
 
     val minimumSteps = findShortestPath(start, goal, { lit -> lit.filter { it.value != '#' } })
-    val mustSaveSeconds = 7000
+    val mustSaveSeconds = 0
 
 
-    findAllPathsDFS(
+    findAllPaths(
         MovingData(start, 0, 1),
         goal,
         { if (it.allowsToEnter > 0) it.point.findAllNeighbours() else it.point.findNeighbours { n -> n.value != '#' } },
@@ -25,7 +25,7 @@ fun main() {
             )
         },
         { it.seconds < minimumSteps - mustSaveSeconds }
-    ).size
+    )
         .printResult()
 
 }

@@ -54,8 +54,8 @@ fun findAllPaths(
     filterNeighbours: (MovingData) -> Collection<TraversablePoint<Char>>,
     mapFunction: (MovingData, TraversablePoint<Char>) -> MovingData,
     additionFilters: (MovingData) -> Boolean
-): Set<List<TraversablePoint<Char>>> {
-    val allPaths = mutableSetOf<List<TraversablePoint<Char>>>()
+): Long {
+    var allPaths = 0L
     val stack = ArrayDeque<Pair<MovingData, MutableList<TraversablePoint<Char>>>>()
     stack.push(start to mutableListOf())
 
@@ -64,7 +64,7 @@ fun findAllPaths(
         path.add(current.point)
 
         if (current.point == finish) {
-            allPaths.add(path)
+            allPaths++
         } else {
             filterNeighbours(current)
                 .filter { it !in path }
