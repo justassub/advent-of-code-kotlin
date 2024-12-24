@@ -19,3 +19,29 @@ object MathUtil {
             }
     }
 }
+
+enum class Operator {
+    ADDITION, MULTIPLICATION, DIVISION, SUBTRACTION;
+
+    fun applyNumbers(d1: Long, d2: Long): Number {
+        return when (this) {
+            ADDITION -> d1 + d2
+            MULTIPLICATION -> d1 * d2
+            DIVISION -> d1 / d2
+            SUBTRACTION -> d1 - d2
+        }
+    }
+
+    companion object {
+        fun fromString(string: String): Operator {
+            return when (string) {
+                "+" -> ADDITION
+                "*" -> MULTIPLICATION
+                "/" -> DIVISION
+                "-" -> SUBTRACTION
+                else -> throw IllegalArgumentException("Unknown operator: $string")
+            }
+        }
+    }
+
+}
