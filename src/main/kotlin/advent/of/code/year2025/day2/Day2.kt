@@ -9,29 +9,44 @@ fun main() {
         .map { Product(it[0].toLong(), it[1].toLong()) }
 
 
-    val incorrectIds = products
-        .flatMap { it.getIncorrectIds() }
+    products
+        .flatMap { p -> p.getIncorrectIds { isTextSameHalf(it) } }
+        .let { println("Incorrect product IDs: ${it.sum()}") }
 
-    println("Incorrect product IDs: ${incorrectIds.sum()}")
 
+    products
+        .flatMap { p -> p.getIncorrectIds { isNumberMadeFromSameNumbers(it) } }
+        .let { println("Incorrect product IDs: ${it.sum()}") }
+
+
+}
+
+private fun isTextSameHalf(text: String): Boolean {
+    val halfLength = text.length / 2
+    val firstHalf = text.substring(0, halfLength)
+    val secondHalf = text.substring(halfLength)
+    return firstHalf == secondHalf
+}
+
+private fun isNumberMadeFromSameNumbers(number: String): Boolean {
+    for (len in 1..number.length / 2) {
+        if (number.length % len == 0) {
+            val part = number.substring(0, len)
+            if (part.repeat(number.length / len) == number) return true
+        }
+    }
+    return false
 }
 
 private data class Product(
     val startRange: Long,
     val endRange: Long,
 ) {
-    fun getIncorrectIds(): List<Long> {
+    fun getIncorrectIds(filterFunc: (String) -> Boolean): List<Long> {
         return (startRange..endRange)
             .map { it.toString() }
-            .filter { it.length % 2 == 0 }
-            .filter { isTextSameHalf(it) }
+            .filter { filterFunc(it) }
             .map { it.toLong() }
     }
 
-    private fun isTextSameHalf(text: String): Boolean {
-        val halfLength = text.length / 2
-        val firstHalf = text.substring(0, halfLength)
-        val secondHalf = text.substring(halfLength)
-        return firstHalf == secondHalf
-    }
 }
