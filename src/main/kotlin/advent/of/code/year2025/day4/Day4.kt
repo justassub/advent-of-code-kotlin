@@ -7,9 +7,18 @@ import advent.of.code.util.findNeighboursDiagonal
 fun main() {
     val papers = createPointsFromFile(2025, 4)
         .filter { it.value == '@' }
+        .toMutableMap()
+    val removeOnce = removePaper(papers)
+    println("removed papers first time: ${removeOnce.size}")
+    removeOnce.forEach { papers.remove(it.key) }
 
-    val remove = removePaper(papers)
-    println("removed papers: ${remove.size}")
+    val totalRemovedPages = generateSequence {
+        val toRemove = removePaper(papers)
+        toRemove.forEach { papers.remove(it.key) }
+        if (toRemove.isEmpty()) null else toRemove.size
+    }.sum()
+
+    print("total removed papers: ${totalRemovedPages + removeOnce.size}")
 
 }
 
