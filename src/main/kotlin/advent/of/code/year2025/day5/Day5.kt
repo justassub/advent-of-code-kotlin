@@ -19,6 +19,40 @@ fun main() {
         .size
         .printResult()
 
+
+    val mergedRanges = mergeRanges(idRanges)
+    mergedRanges
+        .sumOf { it.maxRangeInc - it.minRangeInc + 1 }
+        .printResult()
+}
+
+
+private fun mergeRanges(ranges: List<IngridientRange>): List<IngridientRange> {
+    if (ranges.isEmpty()) return emptyList()
+
+    val sorted = ranges.sortedBy { it.minRangeInc }
+
+    val result = mutableListOf<IngridientRange>()
+    var current = sorted[0]
+
+    for (i in 1 until sorted.size) {
+        val next = sorted[i]
+        if (next.minRangeInc <= current.maxRangeInc) {
+            // They overlap — merge
+            current = IngridientRange(
+                minRangeInc = current.minRangeInc,
+                maxRangeInc = maxOf(current.maxRangeInc, next.maxRangeInc)
+            )
+        } else {
+            // No overlap — push current, move to next
+            result.add(current)
+            current = next
+        }
+    }
+
+    // add last range
+    result.add(current)
+    return result
 }
 
 data class IngridientRange(
