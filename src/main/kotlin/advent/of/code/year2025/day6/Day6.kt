@@ -1,8 +1,8 @@
 package advent.of.code.year2025.day6
 
 import advent.of.code.ContentReader.readFileAsLines
-import advent.of.code.util.math.MathOperation
 import advent.of.code.util.math.Operator
+import advent.of.code.util.math.applyOperator
 import advent.of.code.util.printResult
 
 
@@ -20,12 +20,9 @@ fun main() {
 
     mathOperators
         .mapIndexed { i, operator ->
-            MathOperation(
-                numbers = numbers.map { it[i] },
-                operator = operator
-            )
+            numbers.map { it[i] }.applyOperator(operator)
         }
-        .sumOf { it.applyOperation() }
+        .sum()
         .printResult()
 
 
