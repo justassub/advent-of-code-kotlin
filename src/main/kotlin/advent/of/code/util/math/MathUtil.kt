@@ -45,3 +45,16 @@ enum class Operator {
     }
 
 }
+
+fun Collection<Number>.applyOperator(operator: Operator): Long {
+    return this.reduce { acc, n -> operator.applyNumbers(acc.toLong(), n.toLong()) } as Long
+}
+
+data class MathOperation(
+    val numbers: List<Long>,
+    val operator: Operator,
+) {
+    fun applyOperation(): Long {
+        return numbers.reduce { acc, n -> operator.applyNumbers(acc, n).toLong() }
+    }
+}
